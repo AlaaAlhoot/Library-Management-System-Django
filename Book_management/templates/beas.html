@@ -1,0 +1,291 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <title>Book Store</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+
+    <!-- jQuery UI CSS (assuming you have the correct path) -->
+    <link rel="stylesheet" href="{% static 'plugins/jquery_datepacker/jquery_ui.css' %}">
+
+    <!-- IonIcons (assuming you have the correct path) -->
+    <link rel="stylesheet" href="{% static 'plugins/ionicons/ionicons.min.css' %}">
+
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'dist/css/adminlte_ar.min.css' %}">
+
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i" rel="stylesheet">
+</head>
+
+<body dir="rtl" class="hold-transition sidebar-mini">
+    
+    {% include "parts/navbar.html" %}
+    {% include "parts/sidebar.html" %}
+    
+    {% block content %}
+    
+    {% endblock %}
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+    <!-- AdminLTE -->
+    <script src="{% static 'dist/js/adminlte.js' %}"></script>
+
+    <!-- OPTIONAL SCRIPTS -->
+    <script src="{% static 'plugins/chart.js/Chart.min.js' %}"></script>
+    <script src="{% static 'dist/js/demo.js' %}"></script>
+
+<!-- ... (previous code) -->
+
+<script>
+ 
+
+    $(document).ready(function() {
+        $(document).ready(function() {
+            $("#all-category-sidebar").click(function() {
+                // عرض جميع العناصر المتعلقة بالكتب
+                $(".bookhide").show();
+            });
+            // الزر "الكل"
+            $("#all-category").click(function() {
+              // عرض جميع العناصر المتعلقة بالكتب
+              $(".bookhide").show();
+            });
+          
+            // التصنيفات الأخرى
+            {% for book in books %}
+            $(".categories{{ book.category.id }}").click(function() {
+              $(".bookhide").hide();
+              $(".book-Cat{{ book.category.id }}").show();
+            });
+            {% endfor %}
+          });
+          
+          {% for book in books %}
+          $("#statusSold").click(function() {
+            $(".bookhide").hide();
+            $(".book-sold").show();
+          });
+      
+          $("#statusRented").click(function() {
+            $(".bookhide").hide();
+            $(".book-rented").show();
+          });
+      
+          $("#statusAvailable").click(function() {
+            $(".bookhide").hide();
+            $(".book-available").show();
+          });
+        {% endfor %}
+        $(document).ready(function() {
+            // Initialize Bootstrap dropdown
+            $('.dropdown-toggle').dropdown();
+        });
+      });
+      
+
+      
+    
+      
+     
+      
+      
+ 
+  
+
+  
+
+  
+
+  $(document).ready(function() {
+    var catInputVisible = false; // Initialize a variable to track visibility
+
+    $('#addcat').click(function() {
+        if (!catInputVisible) {
+            $('#catinput').show(); // Show the element if it's not visible
+        } else {
+            $('#catinput').hide(); // Hide the element if it's visible
+        }
+
+        catInputVisible = !catInputVisible; // Toggle the visibility state
+    });
+});
+
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#rental_price_day').keyup(function() {
+            $('#total_rental_price').val($(this).val() * $('#rental_period').val());
+        });
+    });
+    $(document).ready(function() {
+        var total = 0;
+        $('.totalbook').each(function() {
+          var salary = $(this).text();
+          total += parseInt(salary);
+          $(this).hide(); // إخفاء العناصر التي تحمل الكلاس totalbook بعد جمعها
+        });
+      
+        $('#totalsalarys').text('$' + total);
+      });
+      $(document).ready(function() {
+        var total2 = 0;
+        $(".totalsold").each(function() {
+            $(this).hide();
+            var salary2 = $(this).text();
+            total2 += parseInt(salary2);
+        });
+        $(".salarysoldd").text(total2).hide()  ;
+        var total1 = 0;
+        $(".totalrental").each(function() {
+            $(this).hide();
+            var salary1 = $(this).text();
+            total1 += parseInt(salary1);
+        });
+        $(".salaryrental").text(total1).hide()  ;
+               
+      });
+      
+      
+      
+      
+      
+    
+  $(function () {
+      'use strict';
+
+      // Sales Chart
+      var ticksStyle = {
+          fontColor: '#495057',
+          fontStyle: 'bold'
+      };
+
+      var mode = 'index';
+      var intersect = true;
+
+      var $salesChart = $('#sales-chart');
+
+      var salesChart = new Chart($salesChart, {
+          type: 'bar',
+          data: {
+              labels: ['تفاصيل الارباح'],
+datasets: [
+      {
+        backgroundColor: '#007bff',
+        borderColor: '#007bff',
+        data: [$('.salaryrental').text()]
+      },
+      {
+        backgroundColor: '#ced4da',
+        borderColor: '#ced4da',
+        data: [$('.salarysoldd').text()]
+      }
+    ]
+            
+          },
+          options: {
+              maintainAspectRatio: false,
+              tooltips: {
+                  mode: mode,
+                  intersect: intersect
+              },
+              hover: {
+                  mode: mode,
+                  intersect: intersect
+              },
+              legend: {
+                  display: false
+              },
+              scales: {
+                  yAxes: [
+                      {
+                          gridLines: {
+                              display: true,
+                              lineWidth: '4px',
+                              color: 'rgba(0, 0, 0, .2)',
+                              zeroLineColor: 'transparent'
+                          },
+                          ticks: $.extend(
+                              {
+                                  beginAtZero: true,
+                                  callback: function (value, index, values) {
+                                      if (value >= 1000) {
+                                          value /= 1000;
+                                          value += 'k';
+                                      }
+                                      return '$' + value;
+                                  }
+                              },
+                              ticksStyle
+                          )
+                      }
+                  ],
+                  xAxes: [
+                      {
+                          display: true,
+                          gridLines: {
+                              display: false
+                          },
+                          ticks: ticksStyle
+                      }
+                  ]
+              }
+          }
+      });
+
+      // Pie Chart
+      var pieChart = document.getElementById('visitors-chart').getContext('2d');
+
+      var myPieChart = new Chart(pieChart, {
+          type: 'pie',
+          data: {
+              datasets: [
+                  {
+                      data: ['{{bookavailable}}', '{{booksold}}', '{{bookrent}}'],
+                      backgroundColor: ['#27c100', '#f3545d', '#fdaf4b'],
+                      borderWidth: 10
+                  }
+              ],
+              labels: ['Available', 'Sold', 'Rented']
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              legend: {
+                  position: 'bottom',
+                  labels: {
+                      fontColor: '#000',
+                      fontSize: 15,
+                      usePointStyle: true,
+                      padding: 30
+                  }
+              },
+              pieceLabel: {
+                  render: 'percentage',
+                  fontColor: 'white',
+                  fontSize: 14
+              }
+          }
+      });
+  });
+</script>
+</body>
+</html>
+
+
+
